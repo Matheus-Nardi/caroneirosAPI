@@ -41,7 +41,7 @@ public class AppUser {
     @NotEmpty(message = "The filed CPF is mandatory")
     private String cpf;
 
-    @Column(nullable = false)
+    @Column(nullable = false , length = 11)
     @NotEmpty(message = "The field phone is mandatory")
     private String phone;
 

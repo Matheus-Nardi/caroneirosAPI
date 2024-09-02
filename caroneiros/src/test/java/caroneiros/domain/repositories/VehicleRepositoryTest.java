@@ -31,7 +31,7 @@ public class VehicleRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        // Create and save an AppUser
+
         driver = AppUser.builder()
                 .name("John Doe")
                 .cpf("10356690059")
@@ -40,7 +40,6 @@ public class VehicleRepositoryTest {
                 .build();
         userRepository.save(driver);
 
-        // Create a Vehicle with a default license plate
         vehicle = Vehicle.builder()
                 .driver(driver)
                 .licensePlate("ABC1234")
@@ -91,7 +90,7 @@ public class VehicleRepositoryTest {
 
     @Test
     @DisplayName("Should successfully create a vehicle with a license plate matching format [A-Z]{3}[0-9]{4}")
-    public void createVehicleWithLiscentePlateFormat1Case1() {
+    public void shouldCreateVehicleWithLiscentePlateFormat1Case1() {
         String format1 = "[A-Z]{3}[0-9]{4}";
         vehicleRepository.save(vehicle);
         Optional<Vehicle> vehicleFromDB = vehicleRepository.findById(1l);
@@ -103,7 +102,7 @@ public class VehicleRepositoryTest {
 
     @Test
     @DisplayName("Should throw a ConstraintViolationException when trying to create a vehicle with an invalid license plate format")
-    public void createVehicleWithLiscentePlateFormat1Case2() {
+    public void shouldThrowExceptionWhenCreateVehicleWithLiscentePlateFormat1Case2() {
 
         vehicle.setLicensePlate("ABC123X");
 
@@ -114,7 +113,7 @@ public class VehicleRepositoryTest {
 
     @Test
     @DisplayName("Should successfully create a vehicle with a license plate matching format [A-Z]{3}[0-9][A-Z][0-9]{2}")
-    public void createVehicleWithLiscentePlateFormat2Case1() {
+    public void shoudCreateVehicleWithLiscentePlateFormat2Case1() {
         String format2 = "[A-Z]{3}[0-9][A-Z][0-9]{2}";
 
         vehicle.setLicensePlate("ABC1D23");
@@ -130,7 +129,7 @@ public class VehicleRepositoryTest {
 
     @Test
     @DisplayName("Should throw a ConstraintViolationException when trying to create a vehicle with an invalid license plate format")
-    public void createVehicleWithLiscentePlateFormat2Case2() {
+    public void shouldThrowExceptionWhenCreateVehicleWithLiscentePlateFormat2Case2() {
 
         vehicle.setLicensePlate("ABC1D2A");
 
