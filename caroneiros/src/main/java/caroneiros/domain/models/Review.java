@@ -10,20 +10,26 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "rated_driver_id")
+    @JoinColumn(name = "rated_driver_id" , nullable = false )
     private AppUser ratedDriver;
     @ManyToOne
-    @JoinColumn(name = "reviewing_passenger_id")
+    @JoinColumn(name = "reviewing_passenger_id" , nullable = false)
     private AppUser reviewingPassenger;
 
     @Column(nullable = false)
