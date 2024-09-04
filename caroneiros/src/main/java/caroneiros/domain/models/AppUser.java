@@ -2,6 +2,7 @@ package caroneiros.domain.models;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
@@ -18,12 +19,10 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "app_user")
 public class AppUser {
@@ -53,4 +52,8 @@ public class AppUser {
     @OneToMany(mappedBy = "driver" , cascade = CascadeType.ALL)
     private List<Vehicle> vehicles;
 
+    public AppUser() {
+        this.vehicles = new ArrayList<>();
+    }
+  
 }

@@ -9,10 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CarpoolReservation {
 
     @Id
@@ -28,5 +35,6 @@ public class CarpoolReservation {
     private Carpool carpool;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private CarpoolStatus status;
 }
