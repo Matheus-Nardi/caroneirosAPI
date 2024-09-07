@@ -1,9 +1,9 @@
 package caroneiros.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
@@ -11,7 +11,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Vehicle;
 import caroneiros.domain.repositories.AppUserRepository;
-import caroneiros.domain.repositories.VehicleRepository;
+import caroneiros.infra.exception.DontDriverException;
 import caroneiros.infra.exception.NotFoundAppUserException;
 
 @SpringBootTest
@@ -35,58 +34,64 @@ public class AppUserServiceTest {
     private AppUserRepository userRepository;
 
     @Mock
-    private VehicleRepository vehicleRepository;
+    private VehicleService vehicleService;
 
     @InjectMocks
     private AppUserService userService;
 
+    private AppUser driver;
+    private AppUser nonDriver;
+    private Vehicle vehicle;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        driver = AppUser.builder()
+                .id(1l)
+                .name("Motorista")
+                .driver(true)
+                .build();
+
+        nonDriver = AppUser.builder()
+                .id(2l)
+                .name("Passageiro")
+                .driver(false)
+                .build();
+
+        vehicle = Vehicle.builder()
+                .model("Ford")
+                .build();
     }
 
     @Test
     @DisplayName("Should save user successfully")
     void shouldSaveUserSuccessfully() {
-        AppUser user = AppUser.builder()
-                .id(1l)
-                .name("Raul")
-                .build();
+        when(userRepository.save(nonDriver)).thenReturn(nonDriver);
+        userService.saveUser(nonDriver);
+        verify(userRepository, times(1)).save(nonDriver);
 
-        when(userRepository.save(user)).thenReturn(user);
-        userService.saveUser(user);
-        verify(userRepository, times(1)).save(user);
-
-        assertEquals(user.getName(), "Raul");
+        assertEquals(nonDriver.getName(), "Passageiro");
     }
 
     @Test
     @DisplayName("Should return null when saving user fails")
     void shouldReturnNullWhenSaveUserFails() {
-        AppUser user = AppUser.builder()
-                .id(1l)
-                .name("Raul")
-                .build();
 
-        when(userRepository.save(user)).thenReturn(null);
-        AppUser userSaved = userRepository.save(user);
-        verify(userRepository, times(1)).save(user);
+        when(userRepository.save(nonDriver)).thenReturn(null);
+        AppUser userSaved = userRepository.save(nonDriver);
+        verify(userRepository, times(1)).save(nonDriver);
         assertNull(userSaved);
     }
 
     @Test
     @DisplayName("Should return user by ID")
-     void shouldReturnUserById() {
-        AppUser user = AppUser.builder()
-                .id(1l)
-                .name("Raul")
-                .build();
+    void shouldReturnUserById() {
 
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(nonDriver));
         AppUser userFind = userService.findUserById(1l);
         verify(userRepository, times(1)).findById(1l);
-        assertEquals(user, userFind);
-        assertEquals(1l, userFind.getId());
+        assertEquals(nonDriver, userFind);
+        assertEquals(2l, userFind.getId());
     }
 
     @Test
@@ -100,15 +105,10 @@ public class AppUserServiceTest {
     @Test
     @DisplayName("Should delete user by ID successfully")
     public void shouldDeleteUserById() {
-        AppUser user = AppUser.builder()
-                .id(1L)
-                .name("Raul")
-                .build();
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(nonDriver));
         userService.deleteUserById(1L);
         verify(userRepository, times(1)).findById(1L);
-        verify(userRepository, times(1)).delete(user);
+        verify(userRepository, times(1)).delete(nonDriver);
     }
 
     @Test
@@ -125,27 +125,25 @@ public class AppUserServiceTest {
     @Test
     @DisplayName("Should register a vehicle to a driver")
     public void shouldRegisterVehicleToDriver() {
-        AppUser driver = AppUser.builder()
-                .id(1l)
-                .name("Raul")
-                .driver(true)
-                .vehicles(new ArrayList<>())
-                .build();
-
-        Vehicle vehicle = Vehicle.builder()
-                .driver(driver)
-                .licensePlate("ABC1234")
-                .model("Sedan")
-                .color("Blue")
-                .build();
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(driver));
 
         userService.registerVehicle(1l, vehicle);
-        
-        assertTrue(driver.getVehicles().contains(vehicle));
-        verify(userRepository, times(1)).findById(1L);
-        verify(userRepository, times(1)).save(driver);
+
+        verify(vehicleService, times(1)).addVehicleForUser(driver, vehicle);
+
+    }
+
+    @Test
+    @DisplayName("Should throw DontDriverException when attempting to register a vehicle for a non-driver user")
+    public void shouldThrowDontDriverExceptionWhenNonDriverTriesToRegisterVehicle() {
+
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(nonDriver));
+
+        assertThrowsExactly(DontDriverException.class, () -> userService.registerVehicle(1l, new Vehicle()));
+
+        assertFalse(nonDriver.isDriver());
+        verify(vehicleService, never()).addVehicleForUser(any(), any());
 
     }
 }
