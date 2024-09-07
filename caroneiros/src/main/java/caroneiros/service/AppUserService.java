@@ -1,7 +1,5 @@
 package caroneiros.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +18,8 @@ public class AppUserService {
     @Autowired
     private AppUserRepository userRepository;
 
+    @Autowired
+    private VehicleService vehicleService;
 
     public AppUser saveUser(AppUser user) {
         log.info("Salvando usuário [{}]", user.getName());
@@ -59,10 +59,8 @@ public class AppUserService {
         AppUser user = this.findUserById(userId);
 
         if (user.isDriver()) {
-            List<Vehicle> vehicles = user.getVehicles();
-            vehicles.add(vehicle);
-            userRepository.save(user);
-        }else{
+            vehicleService.addVehicleForUser(user, vehicle);
+        } else {
             throw new DontDriverException("O usuário informado não é um motorista");
         }
 

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,7 +48,7 @@ public class AppUser {
     @Column(nullable = false)
     private boolean driver;
 
-    @OneToMany(mappedBy = "driver" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "driver")
     private List<Vehicle> vehicles;
 
     public AppUser() {
