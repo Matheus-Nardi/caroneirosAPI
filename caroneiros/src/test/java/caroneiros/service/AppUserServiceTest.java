@@ -25,7 +25,7 @@ import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Vehicle;
 import caroneiros.domain.repositories.AppUserRepository;
 import caroneiros.infra.exception.DontDriverException;
-import caroneiros.infra.exception.NotFoundAppUserException;
+import caroneiros.infra.exception.NotFoundException;
 
 @SpringBootTest
 public class AppUserServiceTest {
@@ -97,8 +97,8 @@ public class AppUserServiceTest {
     @Test
     @DisplayName("Should throw exception when user not found by ID")
     public void shouldThrowExceptionWhenUserNotFoundById() {
-        when(userRepository.findById(anyLong())).thenThrow(NotFoundAppUserException.class);
-        assertThrowsExactly(NotFoundAppUserException.class, () -> userService.findUserById(1L));
+        when(userRepository.findById(anyLong())).thenThrow(NotFoundException.class);
+        assertThrowsExactly(NotFoundException.class, () -> userService.findUserById(1L));
         verify(userRepository, times(1)).findById(1l);
     }
 
@@ -116,7 +116,7 @@ public class AppUserServiceTest {
     public void shouldThrowExceptionWhenDeletingNonExistentUser() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrowsExactly(NotFoundAppUserException.class, () -> userService.deleteUserById(1L));
+        assertThrowsExactly(NotFoundException.class, () -> userService.deleteUserById(1L));
 
         verify(userRepository, times(1)).findById(1L);
         verify(userRepository, never()).delete(any(AppUser.class));
