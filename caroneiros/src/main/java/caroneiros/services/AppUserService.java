@@ -1,4 +1,4 @@
-package caroneiros.service;
+package caroneiros.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Vehicle;
 import caroneiros.domain.repositories.AppUserRepository;
-import caroneiros.infra.exception.DontDriverException;
-import caroneiros.infra.exception.NotFoundException;
+import caroneiros.infra.exceptions.DontDriverException;
+import caroneiros.infra.exceptions.NotFoundException;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

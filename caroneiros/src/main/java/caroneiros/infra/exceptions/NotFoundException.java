@@ -1,4 +1,4 @@
-package caroneiros.infra.exception;
+package caroneiros.infra.exceptions;
 
 public class NotFoundException extends RuntimeException{
 

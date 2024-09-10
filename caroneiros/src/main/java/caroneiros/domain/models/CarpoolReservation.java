@@ -37,4 +37,5 @@ public class CarpoolReservation {
     @Enumerated(EnumType.STRING)
     @NotNull
     private CarpoolStatus status;
+
 }
