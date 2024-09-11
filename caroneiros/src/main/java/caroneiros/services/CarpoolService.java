@@ -10,6 +10,7 @@ import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
 import caroneiros.domain.repositories.CarpoolRepository;
 import caroneiros.dtos.CarpoolRequestDTO;
+import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NotFoundException;
 import lombok.extern.log4j.Log4j2;
 
@@ -28,6 +29,8 @@ public class CarpoolService implements CarpoolServiceInterface {
     @Override
     public Carpool saveCarpool(CarpoolRequestDTO carpoolDTO) {
         AppUser driver = userService.findUserById(carpoolDTO.driverId());
+        if (!driver.isDriver())
+            throw new DontDriverException("O usuário fornecido não é um motorista");
         Carpool carpool = Carpool.builder()
                 .driver(driver)
                 .estimatedDeparture(carpoolDTO.estimatedDeparture())
@@ -48,8 +51,11 @@ public class CarpoolService implements CarpoolServiceInterface {
 
     @Override
     public void deleteCarpoolById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteCarpoolById'");
+        log.info("Deletando carona de id [{}]", id);
+        Carpool carpool = carpoolRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Carona não encontrada!"));
+        carpoolRepository.delete(carpool);
+
     }
 
     @Override
@@ -72,8 +78,8 @@ public class CarpoolService implements CarpoolServiceInterface {
 
     @Override
     public List<Carpool> findAvailableCarpools() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAvailableCarpools'");
+        log.info("Buscando por caronas que possuem assentos disponíveis");
+        return carpoolRepository.findAvailableCarpools();
     }
 
     @Override
@@ -82,9 +88,4 @@ public class CarpoolService implements CarpoolServiceInterface {
         throw new UnsupportedOperationException("Unimplemented method 'isDriverAvailable'");
     }
 
-    @Override
-    public void completeCarpool(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'completeCarpool'");
-    }
 }

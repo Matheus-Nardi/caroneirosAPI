@@ -16,6 +16,5 @@ public interface CarpoolServiceInterface {
     Carpool uptadeCarpool(Long id , Carpool carpoolToUpdate);
     List<Carpool> findAvailableCarpools();
     boolean isDriverAvailable(Long driverId, LocalDateTime departureTime);
-    void completeCarpool(Long id);
 
 }
