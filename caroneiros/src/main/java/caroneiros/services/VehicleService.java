@@ -17,6 +17,8 @@ public class VehicleService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+
+    // Ver se faz sentido , ou se deve ser apenas um CRUD para veiculos e não relacionar com o usuario aqui.
     public void addVehicleForUser(AppUser user, Vehicle vehicle) {
         log.info("Adicionando veículo [{}] para {[]}", vehicle.getModel(), user.getName());
         vehicle.setDriver(user);

@@ -3,7 +3,6 @@ package caroneiros.services;
 
 
 import java.util.List;
-import java.time.LocalDateTime;
 
 import caroneiros.domain.models.Carpool;
 import caroneiros.dtos.CarpoolRequestDTO;
@@ -15,6 +14,5 @@ public interface CarpoolServiceInterface {
     void deleteCarpoolById(Long id);
     Carpool uptadeCarpool(Long id , Carpool carpoolToUpdate);
     List<Carpool> findAvailableCarpools();
-    boolean isDriverAvailable(Long driverId, LocalDateTime departureTime);
 
 }

@@ -5,6 +5,7 @@ import caroneiros.dtos.ReservationRequestDTO;
 
 public interface CarpoolReservationServiceInterface {
     CarpoolReservation reserveCarpool(ReservationRequestDTO reservation);
-    void cancelCarpool(Long carpoolId);
+    CarpoolReservation findCarpoolReservationById(Long carpoolReservationId);
+    void cancelCarpool(Long carpoolId , Long carpoolReservationId);
     boolean isCarpoolFull(Long carpoolId);
 }

@@ -1,6 +1,5 @@
 package caroneiros.services;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ public class CarpoolService implements CarpoolServiceInterface {
 
     @Autowired
     private AppUserService userService;
-
-    @Autowired
 
     @Override
     public Carpool saveCarpool(CarpoolRequestDTO carpoolDTO) {
@@ -81,11 +78,4 @@ public class CarpoolService implements CarpoolServiceInterface {
         log.info("Buscando por caronas que possuem assentos disponíveis");
         return carpoolRepository.findAvailableCarpools();
     }
-
-    @Override
-    public boolean isDriverAvailable(Long driverId, LocalDateTime departureTime) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isDriverAvailable'");
-    }
-
 }

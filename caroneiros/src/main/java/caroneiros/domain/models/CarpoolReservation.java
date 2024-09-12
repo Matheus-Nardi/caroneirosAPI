@@ -34,6 +34,8 @@ public class CarpoolReservation {
     @JoinColumn(name = "carpool_id" , nullable = false)
     private Carpool carpool;
 
+    private Integer seatsReserved;
+    
     @Enumerated(EnumType.STRING)
     @NotNull
     private CarpoolStatus status;
