@@ -14,7 +14,10 @@ C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\repositories
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\AppUserResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\AppUserToUpdateRequestDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\CarpoolRequestDTO.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\mapper\AppUserMapper.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\mapper\VehicleMapper.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\ReservationRequestDTO.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\VehiclesResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\HelloController.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exception_handler\ApiError.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exception_handler\ApplicationControllerAdvice.java

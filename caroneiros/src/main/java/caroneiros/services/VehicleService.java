@@ -1,11 +1,17 @@
 package caroneiros.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Vehicle;
 import caroneiros.domain.repositories.VehicleRepository;
+import caroneiros.dtos.VehiclesResponseDTO;
+import caroneiros.dtos.mapper.VehicleMapper;
+import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
@@ -17,41 +23,63 @@ public class VehicleService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    @Autowired
+    private AppUserService appUserService;
 
-    // Ver se faz sentido , ou se deve ser apenas um CRUD para veiculos e não relacionar com o usuario aqui.
-    public void addVehicleForUser(AppUser user, Vehicle vehicle) {
-        log.info("Adicionando veículo [{}] para {[]}", vehicle.getModel(), user.getName());
-        vehicle.setDriver(user);
+    @Transactional
+    public VehiclesResponseDTO registerVehicle(Long driverId, Vehicle vehicle) {
+        log.info("Registrando veículo [{}] para o usúario [{}]", vehicle.getModel(),
+                driverId);
+        AppUser driver = appUserService.findUserById(driverId);
+
+        if (!driver.isDriver()) {
+            throw new DontDriverException("O usuário informado não é um motorista");
+        }
+        vehicle.setDriver(driver);
         vehicleRepository.save(vehicle);
+        return VehicleMapper.toVehiclesResponseDTO(vehicle);
     }
 
-    public Vehicle findVehicleById(Long id) {
-        log.info("Buscando veículo de id [{}]", id);
-        return vehicleRepository.findById(id).orElseThrow(() -> new NotFoundException("Véiculo não encontrado"));
+    public List<VehiclesResponseDTO> findAllVehicleByUser(Long userId) {
+        List<Vehicle> vehicles = vehicleRepository.findByDriver_Id(userId);
+        return vehicles.stream()
+                .map(VehicleMapper::toVehiclesResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public void deleteVehicleById(Long id) {
-        log.info("Deletando veículo de id [{}]", id);
-        Vehicle vehicleToDelete = vehicleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Véiculo não encontrado"));
-        vehicleRepository.delete(vehicleToDelete);
+    public void deleteVehicleById(long userId, Long vehicleId) {
+        log.info("Deletando veículo de id [{}] do usuario", vehicleId, userId);
+        Vehicle vehicleFromDB = getVehicleByIdOrThrow(vehicleId);
+        if (!vehicleFromDB.getDriver().getId().equals(userId)) {
+            throw new NotFoundException("O veículo não pertence ao usuário informado");
+        }
+        vehicleRepository.delete(vehicleFromDB);
     }
 
-    // Preciso fazer o teste
-    public Vehicle updateVehicle(Long id , Vehicle vehicleToUpdate){
-        log.info("Atualizando veículo de id [{}]" , id);
-        Vehicle vehicleFromDB = findVehicleById(id);
+    @Transactional
+    public VehiclesResponseDTO updateVehicle(Long userId, Long vehicleId, Vehicle vehicleToUpdate) {
+        log.info("Atualizando veículo de id [{}]", vehicleId);
+        Vehicle vehicleFromDB = getVehicleByIdOrThrow(vehicleId);
 
-        if(vehicleToUpdate.getColor() != null){
+        if (!vehicleFromDB.getDriver().getId().equals(userId)) {
+            throw new NotFoundException("O veículo não pertence ao usuário informado");
+        }
+
+        if (vehicleToUpdate.getColor() != null) {
             vehicleFromDB.setColor(vehicleToUpdate.getColor());
         }
-        if(vehicleToUpdate.getModel() != null){
+        if (vehicleToUpdate.getModel() != null) {
             vehicleFromDB.setModel((vehicleToUpdate.getModel()));
         }
+        Vehicle vehicleUpdated = vehicleRepository.save(vehicleFromDB);
+        return VehicleMapper.toVehiclesResponseDTO(vehicleUpdated);
+    }
 
-        return vehicleRepository.save(vehicleFromDB);
-        
+    private Vehicle getVehicleByIdOrThrow(Long vehicleId) {
+        log.info("Busca por veículo de id [{}]", vehicleId);
+        return vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new NotFoundException("Véiculo não encontrado"));
     }
 
 }

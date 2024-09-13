@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import caroneiros.domain.models.AppUser;
 import caroneiros.dtos.AppUserResponseDTO;
 import caroneiros.dtos.AppUserToUpdateRequestDTO;
-import caroneiros.dtos.RegisterVehicleRequestDTO;
+import caroneiros.dtos.mapper.AppUserMapper;
 import caroneiros.services.AppUserService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -37,34 +37,23 @@ public class AppUserController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AppUserResponseDTO> findUserById(@PathVariable Long id) {
-        log.info("Requisição do tipo GET para baseURL/user/{}", id);
+        log.info("Requisição do tipo GET para baseURL/users/{}", id);
         AppUser userFound = userService.findUserById(id);
-        AppUserResponseDTO userDTO = userService.toAppUserResponseDTO(userFound);
-        return ResponseEntity.ok().body(userDTO);
+        return ResponseEntity.ok().body(AppUserMapper.toAppUserResponseDTO(userFound));
     }
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<AppUserResponseDTO> updateUser(@PathVariable Long id,
             @RequestBody AppUserToUpdateRequestDTO userToUpdate) {
-        log.info("Requisição do tipo PATCH para baseURL/user/{}", id);
+        log.info("Requisição do tipo PATCH para baseURL/users/{}", id);
         AppUser userUpdated = userService.updateUserById(id, userToUpdate);
-        AppUserResponseDTO userDTO = userService.toAppUserResponseDTO(userUpdated);
-        return ResponseEntity.ok().body(userDTO);
+        return ResponseEntity.ok().body(AppUserMapper.toAppUserResponseDTO(userUpdated));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        log.info("Requisição do tipo DELETE para baseURL/user/{}", id);
+        log.info("Requisição do tipo DELETE para baseURL/users/{}", id);
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // Não sei onde deve ficar , veiculo ou usuario
-    @PostMapping(value = "/vehicles")
-    public ResponseEntity<RegisterVehicleRequestDTO> registerVehicle( @RequestBody RegisterVehicleRequestDTO registerVehicleRequestDTO){
-        log.info("Requisição do tipo POST para baseUrl/users/vehicles");
-        userService.registerVehicle(registerVehicleRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(registerVehicleRequestDTO);
-
     }
 }
