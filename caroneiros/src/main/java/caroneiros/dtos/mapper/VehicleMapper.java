@@ -17,6 +17,7 @@ public class VehicleMapper {
                 vehicle.getColor());
     }
 
+
     public static List<VehiclesResponseDTO> toVehiclesResponseDTO(List<Vehicle> vehicles) {
         return vehicles.stream()
                 .map(vehicle -> VehicleMapper.toVehiclesResponseDTO(vehicle))

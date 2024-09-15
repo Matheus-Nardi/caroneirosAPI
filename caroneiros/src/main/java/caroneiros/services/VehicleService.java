@@ -13,6 +13,7 @@ import caroneiros.dtos.VehiclesResponseDTO;
 import caroneiros.dtos.mapper.VehicleMapper;
 import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NotFoundException;
+import caroneiros.infra.exceptions.VehicleNotOwnedException;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 
@@ -52,7 +53,7 @@ public class VehicleService {
         log.info("Deletando veículo de id [{}] do usuario", vehicleId, userId);
         Vehicle vehicleFromDB = getVehicleByIdOrThrow(vehicleId);
         if (!vehicleFromDB.getDriver().getId().equals(userId)) {
-            throw new NotFoundException("O veículo não pertence ao usuário informado");
+            throw new VehicleNotOwnedException("O veículo não pertence ao usuário informado");
         }
         vehicleRepository.delete(vehicleFromDB);
     }
@@ -63,7 +64,7 @@ public class VehicleService {
         Vehicle vehicleFromDB = getVehicleByIdOrThrow(vehicleId);
 
         if (!vehicleFromDB.getDriver().getId().equals(userId)) {
-            throw new NotFoundException("O veículo não pertence ao usuário informado");
+            throw new VehicleNotOwnedException("O veículo não pertence ao usuário informado");
         }
 
         if (vehicleToUpdate.getColor() != null) {
@@ -76,7 +77,7 @@ public class VehicleService {
         return VehicleMapper.toVehiclesResponseDTO(vehicleUpdated);
     }
 
-    private Vehicle getVehicleByIdOrThrow(Long vehicleId) {
+    public Vehicle getVehicleByIdOrThrow(Long vehicleId) {
         log.info("Busca por veículo de id [{}]", vehicleId);
         return vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new NotFoundException("Véiculo não encontrado"));

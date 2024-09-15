@@ -7,10 +7,15 @@ import org.springframework.stereotype.Service;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
+import caroneiros.domain.models.Vehicle;
 import caroneiros.domain.repositories.CarpoolRepository;
 import caroneiros.dtos.CarpoolRequestDTO;
+import caroneiros.dtos.CarpoolResponseDTO;
+import caroneiros.dtos.mapper.CarpoolMapper;
 import caroneiros.infra.exceptions.DontDriverException;
+import caroneiros.infra.exceptions.NoVehiclesException;
 import caroneiros.infra.exceptions.NotFoundException;
+import caroneiros.infra.exceptions.VehicleNotOwnedException;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -23,20 +28,37 @@ public class CarpoolService implements CarpoolServiceInterface {
     @Autowired
     private AppUserService userService;
 
+    @Autowired
+    private VehicleService vehicleService;
+
     @Override
-    public Carpool saveCarpool(CarpoolRequestDTO carpoolDTO) {
+    public CarpoolResponseDTO saveCarpool(CarpoolRequestDTO carpoolDTO) {
         AppUser driver = userService.findUserById(carpoolDTO.driverId());
+
+        validateDriver(driver);
+
+        Vehicle vehicle = getVehicleOwnership(carpoolDTO, driver);
+
+        Carpool carpool = CarpoolMapper.toEntity(carpoolDTO, driver);
+
+        carpoolRepository.save(carpool);
+        return CarpoolMapper.toCarpoolResponseDTO(carpool, vehicle);
+    }
+
+    private Vehicle getVehicleOwnership(CarpoolRequestDTO carpoolDTO, AppUser driver) {
+        Vehicle vehicle = vehicleService.getVehicleByIdOrThrow(carpoolDTO.vehicleId());
+        if (!driver.getVehicles().contains(vehicle)) {
+            throw new VehicleNotOwnedException("O véiculo não pertence ao usuário informado");
+        }
+        return vehicle;
+    }
+
+    private void validateDriver(AppUser driver) {
         if (!driver.isDriver())
             throw new DontDriverException("O usuário fornecido não é um motorista");
-        Carpool carpool = Carpool.builder()
-                .driver(driver)
-                .estimatedDeparture(carpoolDTO.estimatedDeparture())
-                .estimatedArrival(carpoolDTO.estimatedDeparture().plusHours(1L))
-                .estimadedPrice(carpoolDTO.estimadedPrice())
-                .seatsAvailable(carpoolDTO.seatsAvailable())
-                .build();
 
-        return carpoolRepository.save(carpool);
+        if (driver.getVehicles().isEmpty())
+            throw new NoVehiclesException("O usuário informado não possui veículos cadastrados");
     }
 
     @Override

@@ -1,5 +1,12 @@
 package caroneiros.dtos;
+
 import java.time.LocalDateTime;
-public record CarpoolRequestDTO(Long driverId ,  LocalDateTime estimatedDeparture , Double estimadedPrice , Integer seatsAvailable) {
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public record CarpoolRequestDTO(Long driverId, Long vehicleId,
+                @JsonFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime estimatedDeparture,
+                Double estimadedPrice,
+                Integer seatsAvailable) {
 
 }

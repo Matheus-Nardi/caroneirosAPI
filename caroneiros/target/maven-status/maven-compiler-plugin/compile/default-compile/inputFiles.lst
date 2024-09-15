@@ -1,5 +1,7 @@
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\App.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\controllers\AppUserController.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\controllers\CarpoolController.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\controllers\VehicleController.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\AppUser.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\Carpool.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\CarpoolReservation.java
@@ -14,7 +16,9 @@ C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\repositories
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\AppUserResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\AppUserToUpdateRequestDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\CarpoolRequestDTO.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\CarpoolResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\mapper\AppUserMapper.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\mapper\CarpoolMapper.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\mapper\VehicleMapper.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\ReservationRequestDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\VehiclesResponseDTO.java
@@ -24,6 +28,8 @@ C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exception_han
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\DontDriverException.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\NoSeatsAvaliableException.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\NotFoundException.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\NoVehiclesException.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\VehicleNotOwnedException.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\services\AppUserService.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\services\CarpoolReservationService.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\services\CarpoolReservationServiceInterface.java

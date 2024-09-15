@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NoSeatsAvaliableException;
+import caroneiros.infra.exceptions.NoVehiclesException;
 import caroneiros.infra.exceptions.NotFoundException;
+import caroneiros.infra.exceptions.VehicleNotOwnedException;
 
 @RestControllerAdvice
 @ControllerAdvice
@@ -31,6 +33,7 @@ public class ApplicationControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
+
     @ExceptionHandler(DontDriverException.class)
     public ResponseEntity<ApiError> handleDontDriverException(DontDriverException ex) {
         ApiError apiError = ApiError.builder()
@@ -56,11 +59,38 @@ public class ApplicationControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
+
+    @ExceptionHandler(NoVehiclesException.class)
+    public ResponseEntity<ApiError> handleNoVehiclesException(NoVehiclesException ex) {
+        ApiError apiError = ApiError.builder()
+                .timetamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .erro(ex.getMessage())
+                .errors(List.of(ex.getMessage()))
+                .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
+    @ExceptionHandler(VehicleNotOwnedException.class)
+    public ResponseEntity<ApiError> handleVehicleNotOwnedException(VehicleNotOwnedException ex) {
+        ApiError apiError = ApiError.builder()
+                .timetamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .erro(ex.getMessage())
+                .errors(List.of(ex.getMessage()))
+                .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-            .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-            .toList();
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .toList();
         ApiError apiError = ApiError.builder()
                 .timetamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -71,6 +101,7 @@ public class ApplicationControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiError> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         List<String> errors = List.of("Data integrity violation: " + ex.getMostSpecificCause().getMessage());
@@ -84,5 +115,5 @@ public class ApplicationControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
-    
+
 }
