@@ -16,6 +16,7 @@ import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NoVehiclesException;
 import caroneiros.infra.exceptions.NotFoundException;
 import caroneiros.infra.exceptions.VehicleNotOwnedException;
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -33,6 +34,7 @@ public class CarpoolService implements CarpoolServiceInterface {
 
     @Override
     public CarpoolResponseDTO saveCarpool(CarpoolRequestDTO carpoolDTO) {
+       
         AppUser driver = userService.findUserById(carpoolDTO.driverId());
 
         validateDriver(driver);
@@ -41,7 +43,7 @@ public class CarpoolService implements CarpoolServiceInterface {
 
         Carpool carpool = CarpoolMapper.toEntity(carpoolDTO, driver);
 
-        carpoolRepository.save(carpool);
+        this.saveCarpool(carpool);
         return CarpoolMapper.toCarpoolResponseDTO(carpool, vehicle);
     }
 
@@ -69,6 +71,7 @@ public class CarpoolService implements CarpoolServiceInterface {
     }
 
     @Override
+    @Transactional
     public void deleteCarpoolById(Long id) {
         log.info("Deletando carona de id [{}]", id);
         Carpool carpool = carpoolRepository.findById(id)
@@ -78,6 +81,7 @@ public class CarpoolService implements CarpoolServiceInterface {
     }
 
     @Override
+    @Transactional
     public Carpool uptadeCarpool(Long id, Carpool carpoolToUpdate) {
         Carpool carpoolFromDB = findCarpoolById(id);
 
@@ -99,5 +103,12 @@ public class CarpoolService implements CarpoolServiceInterface {
     public List<Carpool> findAvailableCarpools() {
         log.info("Buscando por caronas que possuem assentos disponíveis");
         return carpoolRepository.findAvailableCarpools();
+    }
+
+    @Override
+    @Transactional
+    public Carpool saveCarpool(Carpool carpool) {
+        log.info("Salvando carona [{}]" , carpool.getId());
+        return carpoolRepository.save(carpool);
     }
 }

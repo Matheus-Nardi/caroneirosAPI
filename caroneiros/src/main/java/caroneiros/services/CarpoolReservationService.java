@@ -2,6 +2,7 @@ package caroneiros.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
@@ -9,6 +10,8 @@ import caroneiros.domain.models.CarpoolReservation;
 import caroneiros.domain.models.CarpoolStatus;
 import caroneiros.domain.repositories.CarpoolReservationRepository;
 import caroneiros.dtos.ReservationRequestDTO;
+import caroneiros.dtos.ReservationResponseDTO;
+import caroneiros.dtos.mapper.CarpoolReserrvationMapper;
 import caroneiros.infra.exceptions.NoSeatsAvaliableException;
 import caroneiros.infra.exceptions.NotFoundException;
 import lombok.extern.log4j.Log4j2;
@@ -27,36 +30,40 @@ public class CarpoolReservationService implements CarpoolReservationServiceInter
     private CarpoolReservationRepository carpoolReservationRepository;
 
     @Override
-    public CarpoolReservation reserveCarpool(ReservationRequestDTO reservation) {
-        log.info("Realizando a reserva da carona [{}]", reservation.carpoolId());
-        AppUser passanger = appUserService.findUserById(reservation.passengerId());
-        Carpool carpool = carpoolService.findCarpoolById(reservation.carpoolId());
+    public ReservationResponseDTO reserveCarpool(Long passengerId, Long carpoolId, ReservationRequestDTO dto) {
+        log.info("Realizando a reserva da carona [{}]", carpoolId);
+        AppUser passenger = appUserService.findUserById(passengerId);
+        Carpool carpool = valideCarpoolOrThrow(carpoolId, dto.desiredSeats());
 
-        if (!carpool.hasAvailableSeats())
-            throw new NoSeatsAvaliableException("Não há assentos disponíveis");
-
-        if (reservation.desiredSeats() > carpool.getSeatsAvailable())
-            throw new NoSeatsAvaliableException("A quantidade desejada é maior que a disponível");
-
-        carpool.setSeatsAvailable(carpool.getSeatsAvailable() - reservation.desiredSeats());
-        CarpoolReservation carpoolReservation = CarpoolReservation.builder()
-                .passenger(passanger)
-                .carpool(carpool)
-                .seatsReserved(reservation.desiredSeats())
-                .status(CarpoolStatus.CONFIRMED)
-                .build();
+        if (carpool.getDriver().getId().equals(passengerId))
+            throw new IllegalArgumentException("O motorista não pode ser reservar uma carona!");
+        carpool.setSeatsAvailable(carpool.getSeatsAvailable() - dto.desiredSeats());
+        CarpoolReservation carpoolReservation = CarpoolReserrvationMapper.toEntity(passenger, carpool,
+                dto.desiredSeats());
 
         carpool.addReservation(carpoolReservation);
         carpoolReservationRepository.save(carpoolReservation);
         carpoolService.uptadeCarpool(carpool.getId(), carpool);
-        return carpoolReservation;
+        return CarpoolReserrvationMapper.toReservationResponseDTO(carpoolReservation, carpool);
+    }
+
+    private Carpool valideCarpoolOrThrow(Long carpoolId, Integer desiredSeats) {
+        Carpool carpool = carpoolService.findCarpoolById(carpoolId);
+
+        if (!carpool.hasAvailableSeats())
+            throw new NoSeatsAvaliableException("Não há assentos disponíveis");
+
+        if (desiredSeats > carpool.getSeatsAvailable())
+            throw new NoSeatsAvaliableException("A quantidade desejada é maior que a disponível");
+        return carpool;
     }
 
     @Override
-    public void cancelCarpool(Long carpoolId, Long carpoolReservationId) {
-       
-        Carpool carpool = carpoolService.findCarpoolById(carpoolId);
+    @Transactional
+    public void cancelCarpool(Long carpoolReservationId) {
+
         CarpoolReservation reservation = findCarpoolReservationById(carpoolReservationId);
+        Carpool carpool = reservation.getCarpool();
 
         if (reservation.getStatus() == CarpoolStatus.CANCELLED) {
             throw new IllegalStateException("Reservation is already cancelled.");
@@ -64,6 +71,8 @@ public class CarpoolReservationService implements CarpoolReservationServiceInter
         reservation.setStatus(CarpoolStatus.CANCELLED);
         carpool.setSeatsAvailable(carpool.getSeatsAvailable() + reservation.getSeatsReserved());
         carpool.getReservations().remove(reservation);
+        carpoolService.saveCarpool(carpool);
+        carpoolReservationRepository.save(reservation);
 
     }
 

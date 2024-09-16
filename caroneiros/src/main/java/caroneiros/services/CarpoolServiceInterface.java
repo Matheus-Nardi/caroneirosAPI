@@ -9,6 +9,7 @@ import caroneiros.dtos.CarpoolResponseDTO;
 public interface CarpoolServiceInterface {
 
     CarpoolResponseDTO saveCarpool(CarpoolRequestDTO carpoolDTO);
+    Carpool saveCarpool(Carpool carpool);
     Carpool findCarpoolById(Long id);
     void deleteCarpoolById(Long id);
     Carpool uptadeCarpool(Long id , Carpool carpoolToUpdate);

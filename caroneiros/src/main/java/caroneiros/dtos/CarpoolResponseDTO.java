@@ -9,6 +9,7 @@ public record CarpoolResponseDTO(String driverName,
         String vehicleLisencePlate,
         String vehicleColor,
         @JsonFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime estimatedDeparture,
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime estimatedArrival,
         Double estimadedPrice,
         Integer seatsAvailable) {
 

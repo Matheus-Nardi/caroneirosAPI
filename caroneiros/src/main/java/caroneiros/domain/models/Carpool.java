@@ -60,7 +60,7 @@ public class Carpool {
     }
 
     public boolean hasAvailableSeats(){
-        return this.getSeatsAvailable() <= 0;
+        return this.getSeatsAvailable() > 0;
     }
 
 }

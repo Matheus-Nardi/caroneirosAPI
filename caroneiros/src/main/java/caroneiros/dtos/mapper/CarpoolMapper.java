@@ -14,6 +14,7 @@ public class CarpoolMapper {
                 vehicle.getLicensePlate(),
                 vehicle.getColor(),
                 carpool.getEstimatedDeparture(),
+                carpool.getEstimatedArrival(),
                 carpool.getEstimadedPrice(),
                 carpool.getSeatsAvailable());
     }

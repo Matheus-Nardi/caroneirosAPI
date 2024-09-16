@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RestController
-@RequestMapping(value = "/caronas")
+@RequestMapping(value = "/carpools")
 public class CarpoolController {
 
     @Autowired
