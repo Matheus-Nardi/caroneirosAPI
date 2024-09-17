@@ -2,30 +2,41 @@ package caroneiros.dtos.mapper;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
-import caroneiros.domain.models.Vehicle;
+import caroneiros.domain.models.City;
 import caroneiros.dtos.CarpoolRequestDTO;
 import caroneiros.dtos.CarpoolResponseDTO;
 
 public class CarpoolMapper {
 
-    public static CarpoolResponseDTO toCarpoolResponseDTO(Carpool carpool, Vehicle vehicle) {
+    public static CarpoolResponseDTO toCarpoolResponseDTO(Carpool carpool) {
         return new CarpoolResponseDTO(carpool.getDriver().getName(),
-                vehicle.getModel(),
-                vehicle.getLicensePlate(),
-                vehicle.getColor(),
                 carpool.getEstimatedDeparture(),
                 carpool.getEstimatedArrival(),
-                carpool.getEstimadedPrice(),
+                carpool.getEstimatedPrice(),
+                carpool.getDepartureCity().name,
+                carpool.getArrivalCity().name,
                 carpool.getSeatsAvailable());
     }
 
     public static Carpool toEntity(CarpoolRequestDTO carpoolDTO, AppUser driver) {
+        City departureCity = carpoolDTO.departureCity();
+        City arrivalCity = definerCity(departureCity);
         return Carpool.builder()
                 .driver(driver)
+                .departureCity(departureCity)
+                .arrivalCity(arrivalCity)
                 .estimatedDeparture(carpoolDTO.estimatedDeparture())
                 .estimatedArrival(carpoolDTO.estimatedDeparture().plusHours(1L))
-                .estimadedPrice(carpoolDTO.estimadedPrice())
+                .estimatedPrice(carpoolDTO.estimadedPrice())
                 .seatsAvailable(carpoolDTO.seatsAvailable())
                 .build();
+    }
+
+    private static City definerCity(City departureCity) {
+        if (departureCity == City.PALMAS) {
+            return City.PORTO_NACIONAL;
+        } else {
+            return City.PALMAS;
+        }
     }
 }

@@ -1,2 +1,3 @@
 caroneiros\App.class
 caroneiros\HelloController.class
+caroneiros\services\CarpoolReservationService.class

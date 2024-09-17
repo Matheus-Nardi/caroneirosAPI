@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import caroneiros.infra.exceptions.DontDriverException;
+import caroneiros.infra.exceptions.InvalidOperationException;
 import caroneiros.infra.exceptions.NoSeatsAvaliableException;
 import caroneiros.infra.exceptions.NoVehiclesException;
 import caroneiros.infra.exceptions.NotFoundException;
@@ -20,6 +21,19 @@ import caroneiros.infra.exceptions.VehicleNotOwnedException;
 @RestControllerAdvice
 @ControllerAdvice
 public class ApplicationControllerAdvice {
+
+    @ExceptionHandler(NoSeatsAvaliableException.class)
+    public ResponseEntity<ApiError> handleNoSeatsAvaliableException(NoSeatsAvaliableException ex) {
+        ApiError apiError = ApiError.builder()
+                .timetamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .erro(ex.getMessage())
+                .errors(List.of(ex.getMessage()))
+                .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(NotFoundException ex) {
@@ -46,19 +60,8 @@ public class ApplicationControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
+    
 
-    @ExceptionHandler(NoSeatsAvaliableException.class)
-    public ResponseEntity<ApiError> handleNoSeatsAvaliableException(NoSeatsAvaliableException ex) {
-        ApiError apiError = ApiError.builder()
-                .timetamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .erro(ex.getMessage())
-                .errors(List.of(ex.getMessage()))
-                .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-    }
 
     @ExceptionHandler(NoVehiclesException.class)
     public ResponseEntity<ApiError> handleNoVehiclesException(NoVehiclesException ex) {
@@ -75,6 +78,18 @@ public class ApplicationControllerAdvice {
 
     @ExceptionHandler(VehicleNotOwnedException.class)
     public ResponseEntity<ApiError> handleVehicleNotOwnedException(VehicleNotOwnedException ex) {
+        ApiError apiError = ApiError.builder()
+                .timetamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .erro(ex.getMessage())
+                .errors(List.of(ex.getMessage()))
+                .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<ApiError> handleInvalidOperationException(InvalidOperationException ex) {
         ApiError apiError = ApiError.builder()
                 .timetamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())

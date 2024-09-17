@@ -12,6 +12,7 @@ import caroneiros.domain.repositories.CarpoolReservationRepository;
 import caroneiros.dtos.ReservationRequestDTO;
 import caroneiros.dtos.ReservationResponseDTO;
 import caroneiros.dtos.mapper.CarpoolReserrvationMapper;
+import caroneiros.infra.exceptions.InvalidOperationException;
 import caroneiros.infra.exceptions.NoSeatsAvaliableException;
 import caroneiros.infra.exceptions.NotFoundException;
 import lombok.extern.log4j.Log4j2;
@@ -36,7 +37,7 @@ public class CarpoolReservationService implements CarpoolReservationServiceInter
         Carpool carpool = valideCarpoolOrThrow(carpoolId, dto.desiredSeats());
 
         if (carpool.getDriver().getId().equals(passengerId))
-            throw new IllegalArgumentException("O motorista não pode ser reservar uma carona!");
+            throw new InvalidOperationException("O motorista não pode ser reservar uma carona!");
         carpool.setSeatsAvailable(carpool.getSeatsAvailable() - dto.desiredSeats());
         CarpoolReservation carpoolReservation = CarpoolReserrvationMapper.toEntity(passenger, carpool,
                 dto.desiredSeats());
@@ -66,7 +67,7 @@ public class CarpoolReservationService implements CarpoolReservationServiceInter
         Carpool carpool = reservation.getCarpool();
 
         if (reservation.getStatus() == CarpoolStatus.CANCELLED) {
-            throw new IllegalStateException("Reservation is already cancelled.");
+            throw new InvalidOperationException("A reserva já foi cancelada.");
         }
         reservation.setStatus(CarpoolStatus.CANCELLED);
         carpool.setSeatsAvailable(carpool.getSeatsAvailable() + reservation.getSeatsReserved());

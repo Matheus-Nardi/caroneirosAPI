@@ -1,7 +1,7 @@
 package caroneiros.dtos;
 
 public record ReservationResponseDTO(
-        String driverName,
+        Long carpoolReserved,
         String passengerName,
         Integer desiredSeats) {
 

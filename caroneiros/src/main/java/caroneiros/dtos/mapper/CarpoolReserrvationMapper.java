@@ -17,7 +17,9 @@ public class CarpoolReserrvationMapper {
                 .build();
     }
 
-    public static ReservationResponseDTO toReservationResponseDTO(CarpoolReservation carpoolReservation, Carpool carpool){
-        return new ReservationResponseDTO(carpool.getDriver().getName(), carpoolReservation.getPassenger().getName(), carpoolReservation.getSeatsReserved());
+    public static ReservationResponseDTO toReservationResponseDTO(CarpoolReservation carpoolReservation,
+            Carpool carpool) {
+        return new ReservationResponseDTO(carpool.getId(), carpoolReservation.getPassenger().getName(),
+                carpoolReservation.getSeatsReserved());
     }
 }

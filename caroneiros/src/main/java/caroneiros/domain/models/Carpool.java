@@ -6,6 +6,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,7 +45,13 @@ public class Carpool {
     private LocalDateTime estimatedDeparture;
 
     private LocalDateTime estimatedArrival;
-    private Double estimadedPrice;
+    private Double estimatedPrice;
+
+    @Enumerated(EnumType.STRING)
+    private City departureCity;
+
+    @Enumerated(EnumType.STRING)
+    private City arrivalCity;
 
     @Column(nullable = false)
     @NotNull(message = "The filed seats is mandatory")
@@ -59,7 +67,7 @@ public class Carpool {
         carpoolReservation.setCarpool(this);
     }
 
-    public boolean hasAvailableSeats(){
+    public boolean hasAvailableSeats() {
         return this.getSeatsAvailable() > 0;
     }
 
