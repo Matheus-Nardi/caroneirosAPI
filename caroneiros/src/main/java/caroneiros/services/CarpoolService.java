@@ -1,9 +1,14 @@
 package caroneiros.services;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import caroneiros.domain.models.AppUser;
@@ -126,5 +131,31 @@ public class CarpoolService implements CarpoolServiceInterface {
 
         return carpoolRepository.save(carpoolFromDB);
 
+    }
+
+    @Override
+    public List<CarpoolResponseDTO> filterCarpools(Carpool entityFilter) {
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(StringMatcher.CONTAINING);
+        Example<Carpool> carpoolExample = Example.of(entityFilter, exampleMatcher);
+        List<Carpool> carpools = carpoolRepository.findAll(carpoolExample);
+        return carpools.stream().map(carpool -> CarpoolMapper.toCarpoolResponseDTO(carpool))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<CarpoolResponseDTO> filterCarpoolsForToday() {
+        log.info("Buscando caronas para a data de hoje [{}]", LocalDate.now());
+        return carpoolRepository.findCarpoolsForToday().stream()
+                .map(carpool -> CarpoolMapper.toCarpoolResponseDTO(carpool)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CarpoolResponseDTO> findCarpoolsByDate(LocalDate date) {
+        log.info("Buscando caronas para a data de [{}]", date);
+        return carpoolRepository.findCarpoolsByDate(date).stream()
+                .map(carpool -> CarpoolMapper.toCarpoolResponseDTO(carpool)).collect(Collectors.toList());
     }
 }

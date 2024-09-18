@@ -1,6 +1,7 @@
 package caroneiros.services;
 
 import java.util.List;
+import java.time.LocalDate;
 
 import caroneiros.domain.models.Carpool;
 import caroneiros.dtos.CarpoolRequestDTO;
@@ -22,5 +23,11 @@ public interface CarpoolServiceInterface {
     Carpool updateCarpool(Long id, CarpoolUpdateRequestDTO carpoolUpdateRequestDTO);
 
     List<CarpoolResponseDTO> findAvailableCarpools();
+
+    List<CarpoolResponseDTO> filterCarpools(Carpool entityFilter);
+
+    List<CarpoolResponseDTO> filterCarpoolsForToday();
+
+    List<CarpoolResponseDTO> findCarpoolsByDate(LocalDate date);
 
 }
