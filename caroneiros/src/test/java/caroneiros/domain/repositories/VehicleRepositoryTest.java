@@ -15,6 +15,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Vehicle;
+import caroneiros.repositories.AppUserRepository;
+import caroneiros.repositories.VehicleRepository;
 import jakarta.validation.ConstraintViolationException;
 
 @DataJpaTest

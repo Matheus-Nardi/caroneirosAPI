@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
+import caroneiros.repositories.AppUserRepository;
+import caroneiros.repositories.CarpoolRepository;
 import jakarta.validation.ConstraintViolationException;
 
 @DataJpaTest

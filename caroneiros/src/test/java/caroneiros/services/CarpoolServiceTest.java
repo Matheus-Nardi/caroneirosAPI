@@ -25,10 +25,12 @@ import org.mockito.MockitoAnnotations;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
-import caroneiros.domain.repositories.CarpoolRepository;
-import caroneiros.dtos.CarpoolRequestDTO;
+import caroneiros.dtos.carpool.CarpoolRequestDTO;
 import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NotFoundException;
+import caroneiros.repositories.CarpoolRepository;
+import caroneiros.services.appuser.AppUserService;
+import caroneiros.services.carpool.CarpoolService;
 
 public class CarpoolServiceTest {
 

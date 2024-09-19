@@ -14,6 +14,9 @@ import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
 import caroneiros.domain.models.CarpoolReservation;
 import caroneiros.domain.models.CarpoolStatus;
+import caroneiros.repositories.AppUserRepository;
+import caroneiros.repositories.CarpoolRepository;
+import caroneiros.repositories.CarpoolReservationRepository;
 
 @DataJpaTest
 public class CarpoolReservationRepositoryTest {

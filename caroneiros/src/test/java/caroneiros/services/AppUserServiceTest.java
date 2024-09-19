@@ -23,9 +23,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Vehicle;
-import caroneiros.domain.repositories.AppUserRepository;
 import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NotFoundException;
+import caroneiros.repositories.AppUserRepository;
+import caroneiros.services.appuser.AppUserService;
+import caroneiros.services.vehicle.VehicleService;
 
 @SpringBootTest
 public class AppUserServiceTest {

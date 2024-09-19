@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import caroneiros.domain.models.Carpool;
-import caroneiros.dtos.CarpoolRequestDTO;
-import caroneiros.dtos.CarpoolResponseDTO;
-import caroneiros.dtos.CarpoolUpdateRequestDTO;
-import caroneiros.services.CarpoolService;
+import caroneiros.dtos.carpool.CarpoolRequestDTO;
+import caroneiros.dtos.carpool.CarpoolResponseDTO;
+import caroneiros.dtos.carpool.CarpoolUpdateRequestDTO;
+import caroneiros.services.carpool.CarpoolService;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -39,29 +38,12 @@ public class CarpoolController {
         return ResponseEntity.status(HttpStatus.CREATED).body(carpoolResponseDTO);
     }
 
-    /*
-     * 
-     @GetMapping
-     public ResponseEntity<List<CarpoolResponseDTO>> findAvaliableCarpools() {
-        log.info("Requisição do tipo GET para baseUrl/carpools");
-        List<CarpoolResponseDTO> carpoolsAvaliables = carpoolService.findAvailableCarpools();
-        return ResponseEntity.ok().body(carpoolsAvaliables);
-        
-    }
-    */
-
-    @GetMapping(value = "/today")
-    public ResponseEntity<List<CarpoolResponseDTO>> findAvaliableCarpoolsForToday() {
-        log.info("Requisição do tipo GET para baseUrl/carpools/today");
-        List<CarpoolResponseDTO> carpoolsAvaliables = carpoolService.filterCarpoolsForToday();
-        return ResponseEntity.ok().body(carpoolsAvaliables);
-
-    }
-
     @GetMapping()
-    public ResponseEntity<List<CarpoolResponseDTO>> findAvaliableCarpoolsByDate(@RequestParam  LocalDate date) {
-        log.info("Requisição do tipo GET  para baseUrl/carpools?date={}", date);
-        List<CarpoolResponseDTO> carpoolsAvaliables = carpoolService.findCarpoolsByDate(date);
+    public ResponseEntity<List<CarpoolResponseDTO>> findAvaliableCarpoolsByDate(
+            @RequestParam(required = false) LocalDate date) {
+        LocalDate filterDate = (date != null) ? date : LocalDate.now();
+        log.info("Requisição do tipo GET  para baseUrl/carpools?date={}", filterDate);
+        List<CarpoolResponseDTO> carpoolsAvaliables = carpoolService.findCarpoolsByDate(filterDate);
         return ResponseEntity.ok().body(carpoolsAvaliables);
 
     }
@@ -73,11 +55,12 @@ public class CarpoolController {
         return ResponseEntity.noContent().build();
     }
 
+    // Arrumar DTO : formatar a data
     @PatchMapping(value = "/{carpoolId}")
-    public ResponseEntity<Carpool> updateCarpool(@PathVariable Long carpoolId,
+    public ResponseEntity<CarpoolResponseDTO> updateCarpool(@PathVariable Long carpoolId,
             @RequestBody CarpoolUpdateRequestDTO carpoolRequestDTO) {
         log.info("Requisião do tipo UPDATE para baseUrl/carpools/{}", carpoolId);
-        Carpool carpool = carpoolService.updateCarpool(carpoolId, carpoolRequestDTO);
+        CarpoolResponseDTO carpool = carpoolService.updateCarpool(carpoolId, carpoolRequestDTO);
         return ResponseEntity.ok().body(carpool);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import caroneiros.domain.models.AppUser;
+import caroneiros.repositories.AppUserRepository;
 import jakarta.validation.ConstraintViolationException;
 
 @DataJpaTest

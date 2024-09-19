@@ -4,7 +4,7 @@ import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
 import caroneiros.domain.models.CarpoolReservation;
 import caroneiros.domain.models.CarpoolStatus;
-import caroneiros.dtos.ReservationResponseDTO;
+import caroneiros.dtos.reservation.ReservationResponseDTO;
 
 public class CarpoolReserrvationMapper {
 
@@ -19,7 +19,8 @@ public class CarpoolReserrvationMapper {
 
     public static ReservationResponseDTO toReservationResponseDTO(CarpoolReservation carpoolReservation,
             Carpool carpool) {
-        return new ReservationResponseDTO(carpool.getId(), carpoolReservation.getPassenger().getName(),
+        return new ReservationResponseDTO(carpoolReservation.getId(), carpool.getId(),
+                carpoolReservation.getPassenger().getName(),
                 carpoolReservation.getSeatsReserved());
     }
 }

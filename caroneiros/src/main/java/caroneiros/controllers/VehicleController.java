@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import caroneiros.domain.models.Vehicle;
-import caroneiros.dtos.VehiclesResponseDTO;
-import caroneiros.services.VehicleService;
+import caroneiros.dtos.vehicle.VehiclesResponseDTO;
+import caroneiros.services.vehicle.VehicleService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 

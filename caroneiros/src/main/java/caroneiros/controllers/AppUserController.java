@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import caroneiros.domain.models.AppUser;
-import caroneiros.dtos.AppUserResponseDTO;
-import caroneiros.dtos.AppUserToUpdateRequestDTO;
+import caroneiros.dtos.appuser.AppUserResponseDTO;
+import caroneiros.dtos.appuser.AppUserToUpdateRequestDTO;
 import caroneiros.dtos.mapper.AppUserMapper;
-import caroneiros.services.AppUserService;
+import caroneiros.services.appuser.AppUserService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 

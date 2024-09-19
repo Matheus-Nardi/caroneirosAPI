@@ -3,13 +3,13 @@ package caroneiros.dtos.mapper;
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Carpool;
 import caroneiros.domain.models.City;
-import caroneiros.dtos.CarpoolRequestDTO;
-import caroneiros.dtos.CarpoolResponseDTO;
+import caroneiros.dtos.carpool.CarpoolRequestDTO;
+import caroneiros.dtos.carpool.CarpoolResponseDTO;
 
 public class CarpoolMapper {
 
     public static CarpoolResponseDTO toCarpoolResponseDTO(Carpool carpool) {
-        return new CarpoolResponseDTO(carpool.getDriver().getName(),
+        return new CarpoolResponseDTO(carpool.getId(), carpool.getDriver().getName(),
                 carpool.getEstimatedDeparture(),
                 carpool.getEstimatedArrival(),
                 carpool.getEstimatedPrice(),

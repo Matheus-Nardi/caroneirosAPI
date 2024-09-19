@@ -18,8 +18,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import caroneiros.domain.models.Vehicle;
-import caroneiros.domain.repositories.VehicleRepository;
 import caroneiros.infra.exceptions.NotFoundException;
+import caroneiros.repositories.VehicleRepository;
+import caroneiros.services.vehicle.VehicleService;
 
 @SpringBootTest
 public class VehicleServiceTest {

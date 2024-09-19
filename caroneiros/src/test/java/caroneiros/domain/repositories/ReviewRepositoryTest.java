@@ -14,6 +14,8 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Review;
+import caroneiros.repositories.AppUserRepository;
+import caroneiros.repositories.ReviewRepository;
 
 @DataJpaTest
 public class ReviewRepositoryTest {
