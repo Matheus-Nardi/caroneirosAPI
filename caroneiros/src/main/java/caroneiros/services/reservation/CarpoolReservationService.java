@@ -1,5 +1,8 @@
 package caroneiros.services.reservation;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +66,7 @@ public class CarpoolReservationService implements CarpoolReservationServiceInter
 
     @Override
     @Transactional
-    public void cancelCarpool(Long carpoolReservationId) {
+    public void cancelReserveCarpool(Long carpoolReservationId) {
 
         CarpoolReservation reservation = getReservationByIdOrThrow(carpoolReservationId);
         Carpool carpool = reservation.getCarpool();
@@ -89,6 +92,14 @@ public class CarpoolReservationService implements CarpoolReservationServiceInter
     private CarpoolReservation getReservationByIdOrThrow(Long id) {
         return carpoolReservationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Reserva de carona não encontrada!"));
+    }
+
+    @Override
+    public List<ReservationResponseDTO> findReservationsByCarpoolId(Long carpoolId) {
+        log.info("Buscando todas as reservas da carona {}" , carpoolId);
+        Carpool carpool = carpoolService.findCarpoolById(carpoolId);
+        List<CarpoolReservation> reservations = carpool.getReservations();
+        return reservations.stream().map(reserve -> CarpoolReserrvationMapper.toReservationResponseDTO(reserve, carpool)).collect(Collectors.toList());
     }
 
 }

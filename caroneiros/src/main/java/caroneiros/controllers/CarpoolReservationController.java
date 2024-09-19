@@ -1,5 +1,6 @@
 package caroneiros.controllers;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,17 +33,24 @@ public class CarpoolReservationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(carpoolReservation);
     }
 
-    @GetMapping(value = "{carpoolReservationId}")
+    @GetMapping(value = "/{carpoolReservationId}")
     public ResponseEntity<ReservationResponseDTO> findCarpoolReservationById(@PathVariable Long carpoolReservationId) {
-        log.info("Requisição do tipo GET para baseUrl/reservations/{carpoolReservationId}");
+        log.info("Requisição do tipo GET para baseUrl/reservations/{}", carpoolReservationId);
         ReservationResponseDTO carpoolReservation = reservationService.findCarpoolReservationById(carpoolReservationId);
         return ResponseEntity.ok().body(carpoolReservation);
     }
 
-    @DeleteMapping(value = "{carpoolReservationId}")
+    @GetMapping("/carpools/{carpoolId}")
+    public ResponseEntity<List<ReservationResponseDTO>> findAllReservationsByCarpool(@PathVariable Long carpoolId) {
+        log.info("Requisição do tipo GET para baseUrl/reservations/{}", carpoolId);
+        List<ReservationResponseDTO> carpoolReservation = reservationService.findReservationsByCarpoolId(carpoolId);
+        return ResponseEntity.ok().body(carpoolReservation);
+    }
+
+    @DeleteMapping(value = "/{carpoolReservationId}")
     public ResponseEntity<Void> cancelCarpoolReservation(@PathVariable Long carpoolReservationId) {
         log.info("Requisião do tipo DELETE para reservation/{}", carpoolReservationId);
-        reservationService.cancelCarpool(carpoolReservationId);
+        reservationService.cancelReserveCarpool(carpoolReservationId);
         return ResponseEntity.noContent().build();
     }
 }

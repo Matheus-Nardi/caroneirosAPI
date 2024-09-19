@@ -38,7 +38,7 @@ public class CarpoolController {
         return ResponseEntity.status(HttpStatus.CREATED).body(carpoolResponseDTO);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<CarpoolResponseDTO>> findAvaliableCarpoolsByDate(
             @RequestParam(required = false) LocalDate date) {
         LocalDate filterDate = (date != null) ? date : LocalDate.now();
@@ -48,19 +48,18 @@ public class CarpoolController {
 
     }
 
-    @DeleteMapping(value = "/{carpoolId}")
-    public ResponseEntity<Void> deleteCarpool(@PathVariable Long carpoolId) {
+    @DeleteMapping(value = "/{carpoolId}/users/{driverId}")
+    public ResponseEntity<Void> deleteCarpool(@PathVariable Long driverId, @PathVariable Long carpoolId) {
         log.info("Requisião do tipo DELETE para baseUrl/carpools/{}", carpoolId);
-        carpoolService.deleteCarpoolById(carpoolId);
+        carpoolService.deleteCarpoolById(carpoolId,driverId);
         return ResponseEntity.noContent().build();
     }
 
-    // Arrumar DTO : formatar a data
-    @PatchMapping(value = "/{carpoolId}")
-    public ResponseEntity<CarpoolResponseDTO> updateCarpool(@PathVariable Long carpoolId,
+    @PatchMapping(value = "/{carpoolId}/users/{driverId}")
+    public ResponseEntity<CarpoolResponseDTO> updateCarpool(@PathVariable Long driverId, @PathVariable Long carpoolId,
             @RequestBody CarpoolUpdateRequestDTO carpoolRequestDTO) {
-        log.info("Requisião do tipo UPDATE para baseUrl/carpools/{}", carpoolId);
-        CarpoolResponseDTO carpool = carpoolService.updateCarpool(carpoolId, carpoolRequestDTO);
-        return ResponseEntity.ok().body(carpool);
+        log.info("Requisião do tipo PATCH para baseUrl/carpools/{}", carpoolId);
+        CarpoolResponseDTO carpool = carpoolService.updateCarpool(carpoolId,driverId, carpoolRequestDTO);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(carpool);
     }
 }
