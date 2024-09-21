@@ -55,7 +55,7 @@ public class Carpool {
 
     @Column(nullable = false)
     @NotNull(message = "The filed seats is mandatory")
-    @Min(1)
+    @Min(0)
     @Max(4)
     private Integer seatsAvailable;
 

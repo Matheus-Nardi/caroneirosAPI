@@ -42,16 +42,16 @@ public class CarpoolServiceImpl implements CarpoolService {
     private VehicleService vehicleService;
 
     @Override
+    @Transactional
     public CarpoolResponseDTO saveCarpool(Long driverId, Long vehicleId, CarpoolRequestDTO carpoolDTO) {
-
+        log.info("Salvado carona criada pelo motorista [{}]" , driverId);
         AppUser driver = userService.findUserById(driverId);
-
         validateDriver(driver);
 
         valideVehicleOwnership(vehicleId, driver);
 
         Carpool carpool = CarpoolMapper.toEntity(carpoolDTO, driver);
-        this.saveCarpool(carpool);
+        carpoolRepository.save(carpool);
         return CarpoolMapper.toCarpoolResponseDTO(carpool);
     }
 
@@ -134,7 +134,7 @@ public class CarpoolServiceImpl implements CarpoolService {
                     "Você não tem permissão para deletar essa carona, pois ela foi criada por outro motorista.");
         }
         if (!carpoolFromDB.getReservations().isEmpty()) {
-            throw new InvalidOperationException("Sua carona já possui reservas. Não é possivel atualiza-la");
+            throw new InvalidOperationException("Sua carona já possui reservas. Não é possivel edita-la");
         }
     }
 

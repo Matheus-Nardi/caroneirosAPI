@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import caroneiros.domain.models.City;
-
 public record CarpoolRequestDTO(
-        City departureCity,
+        String departureCity,
         @JsonFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime estimatedDeparture,
         Double estimadedPrice,
         Integer seatsAvailable) {

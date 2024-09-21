@@ -19,7 +19,7 @@ public class CarpoolMapper {
     }
 
     public static Carpool toEntity(CarpoolRequestDTO carpoolDTO, AppUser driver) {
-        City departureCity = carpoolDTO.departureCity();
+        City departureCity = City.findCity(carpoolDTO.departureCity());
         City arrivalCity = definerCity(departureCity);
         return Carpool.builder()
                 .driver(driver)

@@ -51,7 +51,7 @@ public class CarpoolController {
     @DeleteMapping(value = "/{carpoolId}/users/{driverId}")
     public ResponseEntity<Void> deleteCarpool(@PathVariable Long driverId, @PathVariable Long carpoolId) {
         log.info("Requisião do tipo DELETE para baseUrl/carpools/{}", carpoolId);
-        carpoolService.deleteCarpoolById(carpoolId,driverId);
+        carpoolService.deleteCarpoolById(carpoolId, driverId);
         return ResponseEntity.noContent().build();
     }
 
@@ -59,7 +59,7 @@ public class CarpoolController {
     public ResponseEntity<CarpoolResponseDTO> updateCarpool(@PathVariable Long driverId, @PathVariable Long carpoolId,
             @RequestBody CarpoolUpdateRequestDTO carpoolRequestDTO) {
         log.info("Requisião do tipo PATCH para baseUrl/carpools/{}", carpoolId);
-        CarpoolResponseDTO carpool = carpoolService.updateCarpool(carpoolId,driverId, carpoolRequestDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(carpool);
+        carpoolService.updateCarpool(carpoolId, driverId, carpoolRequestDTO);
+        return ResponseEntity.noContent().build();
     }
 }
