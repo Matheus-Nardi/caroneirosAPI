@@ -48,8 +48,8 @@ public class VehicleController {
             @PathVariable Long vehicleId,
             @RequestBody Vehicle vehicleToUpdate) {
         log.info("Requisição do tipo PATCH para baseUrl/users/{}/vehicles/{}", userId, vehicleId);
-        VehiclesResponseDTO vehicleUpdated = vehicleService.updateVehicle(userId, vehicleId, vehicleToUpdate);
-        return ResponseEntity.ok().body(vehicleUpdated);
+        vehicleService.updateVehicle(userId, vehicleId, vehicleToUpdate);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{vehicleId}")
