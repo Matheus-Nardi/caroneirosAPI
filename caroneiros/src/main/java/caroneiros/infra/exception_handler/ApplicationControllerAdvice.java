@@ -17,6 +17,7 @@ import caroneiros.infra.exceptions.NoSeatsAvaliableException;
 import caroneiros.infra.exceptions.NoVehiclesException;
 import caroneiros.infra.exceptions.NotFoundException;
 import caroneiros.infra.exceptions.VehicleNotOwnedException;
+import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 @ControllerAdvice
@@ -60,8 +61,6 @@ public class ApplicationControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
-    
-
 
     @ExceptionHandler(NoVehiclesException.class)
     public ResponseEntity<ApiError> handleNoVehiclesException(NoVehiclesException ex) {
@@ -88,6 +87,7 @@ public class ApplicationControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
+
     @ExceptionHandler(InvalidOperationException.class)
     public ResponseEntity<ApiError> handleInvalidOperationException(InvalidOperationException ex) {
         ApiError apiError = ApiError.builder()
@@ -125,6 +125,20 @@ public class ApplicationControllerAdvice {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .erro(ex.getMessage())
                 .errors(errors)
+                .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiError> handleConstraintViolationException(ConstraintViolationException ex) {
+
+        ApiError apiError = ApiError.builder()
+                .timetamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .erro(ex.getMessage())
+                .errors(List.of(ex.getLocalizedMessage()))
                 .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .build();
 

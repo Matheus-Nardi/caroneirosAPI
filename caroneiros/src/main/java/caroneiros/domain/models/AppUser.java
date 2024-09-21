@@ -46,6 +46,8 @@ public class AppUser {
 
     private String bio;
 
+    private Double score;
+
     @Column(nullable = false)
     private boolean driver;
 

@@ -1,5 +1,7 @@
 package caroneiros.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,13 @@ public class AppUserController {
         AppUserResponseDTO userSaved = userService.saveUser(appUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(userSaved);
     }
+    //Para fins de facilidade , remover depois
+    @PostMapping(value = "/all")
+    public ResponseEntity<List<AppUserResponseDTO>> saveAll(@Valid @RequestBody List<AppUser> users) {
+        log.info("Requisição do tipo POST para baseUrl/users/all");
+        List<AppUserResponseDTO> usersSaved = userService.saveAll(users);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usersSaved);
+    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AppUserResponseDTO> findUserById(@PathVariable Long id) {
@@ -46,8 +55,8 @@ public class AppUserController {
     public ResponseEntity<AppUserResponseDTO> updateUser(@PathVariable Long id,
             @RequestBody AppUserToUpdateRequestDTO userToUpdate) {
         log.info("Requisição do tipo PATCH para baseURL/users/{}", id);
-        AppUser userUpdated = userService.updateUserById(id, userToUpdate);
-        return ResponseEntity.ok().body(AppUserMapper.toAppUserResponseDTO(userUpdated));
+        userService.updateUserById(id, userToUpdate);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{id}")
