@@ -20,6 +20,7 @@ import caroneiros.dtos.carpool.CarpoolRequestDTO;
 import caroneiros.dtos.carpool.CarpoolResponseDTO;
 import caroneiros.dtos.carpool.CarpoolUpdateRequestDTO;
 import caroneiros.services.carpool.CarpoolService;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -32,7 +33,7 @@ public class CarpoolController {
 
     @PostMapping(value = "/users/{driverId}/vehicles/{vehicleId}")
     public ResponseEntity<CarpoolResponseDTO> saveCarpool(@PathVariable Long driverId, @PathVariable Long vehicleId,
-            @RequestBody CarpoolRequestDTO carpoolRequestDTO) {
+           @Valid @RequestBody CarpoolRequestDTO carpoolRequestDTO) {
         log.info("Requisição do tipo POST para baseUrl/carpools");
         CarpoolResponseDTO carpoolResponseDTO = carpoolService.saveCarpool(driverId, vehicleId, carpoolRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(carpoolResponseDTO);
@@ -57,7 +58,7 @@ public class CarpoolController {
 
     @PatchMapping(value = "/{carpoolId}/users/{driverId}")
     public ResponseEntity<CarpoolResponseDTO> updateCarpool(@PathVariable Long driverId, @PathVariable Long carpoolId,
-            @RequestBody CarpoolUpdateRequestDTO carpoolRequestDTO) {
+          @Valid  @RequestBody CarpoolUpdateRequestDTO carpoolRequestDTO) {
         log.info("Requisião do tipo PATCH para baseUrl/carpools/{}", carpoolId);
         carpoolService.updateCarpool(carpoolId, driverId, carpoolRequestDTO);
         return ResponseEntity.noContent().build();

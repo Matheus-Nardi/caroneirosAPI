@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import caroneiros.dtos.review.ReviewRequestDTO;
 import caroneiros.dtos.review.ReviewResponseDTO;
 import caroneiros.services.review.ReviewService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/reviews")
@@ -22,7 +23,7 @@ public class ReviewController {
 
     @PostMapping(value = "/drivers/{driverId}/passengers/{passengerId}")
     public ResponseEntity<ReviewResponseDTO> createReview(@PathVariable Long driverId, @PathVariable Long passengerId,
-            @RequestBody ReviewRequestDTO dto) {
+            @RequestBody @Valid ReviewRequestDTO dto) {
         ReviewResponseDTO review = reviewService.reviewDriver(driverId, passengerId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(review);
     }

@@ -26,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponseDTO reviewDriver(Long ratedDriver, Long reviewingPassenger, ReviewRequestDTO dto) {
 
-        if(ratedDriver.equals(reviewingPassenger))
+        if (ratedDriver.equals(reviewingPassenger))
             throw new InvalidOperationException("O motorista não pode ser avaliado por ele mesmo!");
         AppUser driver = userService.findUserById(ratedDriver);
         AppUser passenger = userService.findUserById(reviewingPassenger);
@@ -36,9 +36,9 @@ public class ReviewServiceImpl implements ReviewService {
                 .score(dto.score())
                 .description(dto.description())
                 .build();
-                reviewRepository.save(review);
-                driver.setScore(reviewRepository.mediaDriverScore(ratedDriver));
-                userService.saveUser(driver);
+        reviewRepository.save(review);
+        driver.setScore(reviewRepository.mediaDriverScore(ratedDriver));
+        userService.updateUser(ratedDriver, driver);
         return ReviewMapper.toReviewResponseDTO(review);
     }
 

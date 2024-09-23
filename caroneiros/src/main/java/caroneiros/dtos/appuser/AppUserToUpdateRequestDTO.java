@@ -1,5 +1,8 @@
 package caroneiros.dtos.appuser;
 
-public record AppUserToUpdateRequestDTO(String name, String bio, String phone, Boolean driver) {
+import jakarta.validation.constraints.Size;
+
+public record AppUserToUpdateRequestDTO(String name, String bio,
+        @Size(min = 11, max = 11) String phone, Boolean driver) {
 
 }

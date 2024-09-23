@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import caroneiros.domain.models.AppUser;
 import caroneiros.domain.models.Vehicle;
 import caroneiros.dtos.mapper.VehicleMapper;
+import caroneiros.dtos.vehicle.VehicleDTO;
 import caroneiros.dtos.vehicle.VehiclesResponseDTO;
 import caroneiros.infra.exceptions.DontDriverException;
 import caroneiros.infra.exceptions.NotFoundException;
@@ -30,11 +31,11 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Transactional
     @Override
-    public VehiclesResponseDTO registerVehicle(Long driverId, Vehicle vehicle) {
-        log.info("Registrando veículo [{}] para o usúario [{}]", vehicle.getModel(),
+    public VehiclesResponseDTO registerVehicle(Long driverId, VehicleDTO dto) {
+        log.info("Registrando veículo [{}] para o usúario [{}]", dto.model(),
                 driverId);
         AppUser driver = appUserService.findUserById(driverId);
-
+        Vehicle vehicle = new Vehicle(dto);
         if (!driver.isDriver()) {
             throw new DontDriverException("O usuário informado não é um motorista");
         }
@@ -64,7 +65,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Transactional
     @Override
-    public VehiclesResponseDTO updateVehicle(Long userId, Long vehicleId, Vehicle vehicleToUpdate) {
+    public VehiclesResponseDTO updateVehicle(Long userId, Long vehicleId, VehicleDTO vehicleToUpdate) {
         log.info("Atualizando veículo de id [{}]", vehicleId);
         Vehicle vehicleFromDB = getVehicleByIdOrThrow(vehicleId);
 
@@ -72,11 +73,14 @@ public class VehicleServiceImpl implements VehicleService {
             throw new VehicleNotOwnedException("O veículo não pertence ao usuário informado");
         }
 
-        if (vehicleToUpdate.getColor() != null) {
-            vehicleFromDB.setColor(vehicleToUpdate.getColor());
+        if (vehicleToUpdate.licensePlate() != null) {
+            vehicleFromDB.setLicensePlate(vehicleToUpdate.licensePlate());
         }
-        if (vehicleToUpdate.getModel() != null) {
-            vehicleFromDB.setModel((vehicleToUpdate.getModel()));
+        if (vehicleToUpdate.color() != null) {
+            vehicleFromDB.setColor(vehicleToUpdate.color());
+        }
+        if (vehicleToUpdate.model() != null) {
+            vehicleFromDB.setModel((vehicleToUpdate.model()));
         }
         Vehicle vehicleUpdated = vehicleRepository.save(vehicleFromDB);
         return VehicleMapper.toVehiclesResponseDTO(vehicleUpdated);

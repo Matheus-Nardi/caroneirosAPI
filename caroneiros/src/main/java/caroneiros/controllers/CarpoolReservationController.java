@@ -1,6 +1,7 @@
 package caroneiros.controllers;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import caroneiros.dtos.reservation.ReservationRequestDTO;
 import caroneiros.dtos.reservation.ReservationResponseDTO;
 import caroneiros.services.reservation.CarpoolReservationService;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -27,7 +29,7 @@ public class CarpoolReservationController {
 
     @PostMapping(value = "/users/{userId}/carpools/{carpoolId}")
     public ResponseEntity<ReservationResponseDTO> reserveCarpool(@PathVariable Long userId,
-            @PathVariable Long carpoolId, @RequestBody ReservationRequestDTO dto) {
+            @PathVariable Long carpoolId, @Valid @RequestBody ReservationRequestDTO dto) {
         log.info("Requisição do tipo POST para baseUrl/users/{}/carpools/{}", userId, carpoolId);
         ReservationResponseDTO carpoolReservation = reservationService.reserveCarpool(userId, carpoolId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(carpoolReservation);

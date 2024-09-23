@@ -11,6 +11,7 @@ C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\Carpo
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\City.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\Review.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\Vehicle.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\appuser\AppUserDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\appuser\AppUserResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\appuser\AppUserToUpdateRequestDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\carpool\CarpoolRequestDTO.java
@@ -25,6 +26,7 @@ C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\reservation\Re
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\reservation\ReservationResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\review\ReviewRequestDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\review\ReviewResponseDTO.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\vehicle\VehicleDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\vehicle\VehiclesResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exception_handler\ApiError.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exception_handler\ApplicationControllerAdvice.java

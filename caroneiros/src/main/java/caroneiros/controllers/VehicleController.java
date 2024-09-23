@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import caroneiros.domain.models.Vehicle;
+import caroneiros.dtos.vehicle.VehicleDTO;
 import caroneiros.dtos.vehicle.VehiclesResponseDTO;
 import caroneiros.services.vehicle.VehicleService;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class VehicleController {
 
     @PostMapping
     public ResponseEntity<VehiclesResponseDTO> registerVehicle(@PathVariable Long userId,
-            @Valid @RequestBody Vehicle vehicle) {
+            @Valid @RequestBody VehicleDTO vehicle) {
         log.info("Requisição do tipo POST para baseUrl/users/{}/vehicles", userId);
         VehiclesResponseDTO vehicleSaved = vehicleService.registerVehicle(userId, vehicle);
         return ResponseEntity.status(HttpStatus.CREATED).body(vehicleSaved);
@@ -46,7 +46,7 @@ public class VehicleController {
     @PatchMapping(value = "/{vehicleId}")
     public ResponseEntity<VehiclesResponseDTO> updateVehicle(@PathVariable Long userId,
             @PathVariable Long vehicleId,
-            @RequestBody Vehicle vehicleToUpdate) {
+            @Valid @RequestBody VehicleDTO vehicleToUpdate) {
         log.info("Requisição do tipo PATCH para baseUrl/users/{}/vehicles/{}", userId, vehicleId);
         vehicleService.updateVehicle(userId, vehicleId, vehicleToUpdate);
         return ResponseEntity.noContent().build();

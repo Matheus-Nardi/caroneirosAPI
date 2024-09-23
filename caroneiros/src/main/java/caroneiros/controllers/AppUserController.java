@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import caroneiros.domain.models.AppUser;
+import caroneiros.dtos.appuser.AppUserDTO;
 import caroneiros.dtos.appuser.AppUserResponseDTO;
 import caroneiros.dtos.appuser.AppUserToUpdateRequestDTO;
 import caroneiros.dtos.mapper.AppUserMapper;
@@ -31,14 +32,14 @@ public class AppUserController {
     private AppUserService userService;
 
     @PostMapping
-    public ResponseEntity<AppUserResponseDTO> saveUser(@Valid @RequestBody AppUser appUser) {
+    public ResponseEntity<AppUserResponseDTO> saveUser(@Valid @RequestBody AppUserDTO appUser) {
         log.info("Requisição do tipo POST para baseUrl/users");
         AppUserResponseDTO userSaved = userService.saveUser(appUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(userSaved);
     }
     //Para fins de facilidade , remover depois
     @PostMapping(value = "/all")
-    public ResponseEntity<List<AppUserResponseDTO>> saveAll(@Valid @RequestBody List<AppUser> users) {
+    public ResponseEntity<List<AppUserResponseDTO>> saveAll(@Valid @RequestBody List<AppUserDTO> users) {
         log.info("Requisição do tipo POST para baseUrl/users/all");
         List<AppUserResponseDTO> usersSaved = userService.saveAll(users);
         return ResponseEntity.status(HttpStatus.CREATED).body(usersSaved);
@@ -53,7 +54,7 @@ public class AppUserController {
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<AppUserResponseDTO> updateUser(@PathVariable Long id,
-            @RequestBody AppUserToUpdateRequestDTO userToUpdate) {
+           @Valid @RequestBody AppUserToUpdateRequestDTO userToUpdate) {
         log.info("Requisição do tipo PATCH para baseURL/users/{}", id);
         userService.updateUserById(id, userToUpdate);
         return ResponseEntity.noContent().build();

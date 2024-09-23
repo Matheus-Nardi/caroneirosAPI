@@ -67,7 +67,7 @@ public class CarpoolServiceImpl implements CarpoolService {
             throw new DontDriverException("O usuário fornecido não é um motorista");
 
         if (driver.getVehicles().isEmpty())
-            throw new NoVehiclesException("O usuário informado não possui veículos cadastrados");
+            throw new NoVehiclesException("O motorista informado não possui veículos cadastrados");
     }
 
     @Override

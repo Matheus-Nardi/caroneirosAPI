@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import caroneiros.domain.models.AppUser;
+import caroneiros.dtos.appuser.AppUserDTO;
 import caroneiros.dtos.appuser.AppUserResponseDTO;
 import caroneiros.dtos.appuser.AppUserToUpdateRequestDTO;
 import caroneiros.dtos.mapper.AppUserMapper;
@@ -24,10 +25,11 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     @Transactional
-    public AppUserResponseDTO saveUser(AppUser user) {
-        log.info("Salvando usuário [{}]", user.getName());
-        userRepository.save(user);
-        return AppUserMapper.toAppUserResponseDTO(user);
+    public AppUserResponseDTO saveUser(AppUserDTO user) {
+        log.info("Salvando usuário [{}]", user.name());
+        AppUser userToSave = new AppUser(user);
+        userRepository.save(userToSave);
+        return AppUserMapper.toAppUserResponseDTO(userToSave);
     }
 
     @Override
@@ -72,9 +74,18 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public List<AppUserResponseDTO> saveAll(List<AppUser> users) {
-        List<AppUser> usersSaved = userRepository.saveAll(users);
+    public List<AppUserResponseDTO> saveAll(List<AppUserDTO> users) {
+        List<AppUser> usersSaved = users.stream().map(user -> new AppUser(user)).toList();
+
+        userRepository.saveAll(usersSaved);
         return usersSaved.stream().map(user -> AppUserMapper.toAppUserResponseDTO(user)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateUser(Long id, AppUser user) {
+        AppUser userFromDB = getUserByIdOrThrow(id);
+        userFromDB.setScore(user.getScore());
+        userRepository.save(userFromDB);
     }
 
 }
