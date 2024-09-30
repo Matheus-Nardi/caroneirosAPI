@@ -31,6 +31,10 @@ public class AppUser {
 
     private String name;
 
+    private String email;
+
+    private String password;
+
     @Column(nullable = false, unique = true)
     private String cpf;
 
@@ -53,6 +57,8 @@ public class AppUser {
 
     public AppUser(AppUserDTO dto) {
         this.name = dto.name();
+        this.email = dto.email();
+        this.password = dto.password();
         this.cpf = dto.cpf();
         this.phone = dto.phone();
         this.bio = dto.bio();
