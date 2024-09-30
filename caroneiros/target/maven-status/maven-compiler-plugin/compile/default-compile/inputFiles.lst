@@ -36,6 +36,8 @@ C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\No
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\NotFoundException.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\NoVehiclesException.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\exceptions\VehicleNotOwnedException.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\security\AppUserDetailService.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\infra\security\SecurityConfiguration.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\repositories\AppUserRepository.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\repositories\CarpoolRepository.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\repositories\CarpoolReservationRepository.java

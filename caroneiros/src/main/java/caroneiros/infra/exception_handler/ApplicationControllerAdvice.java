@@ -123,7 +123,7 @@ public class ApplicationControllerAdvice {
         ApiError apiError = ApiError.builder()
                 .timetamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
-                .erro(ex.getMessage())
+                .erro("Duplicate primary key")
                 .errors(errors)
                 .path(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .build();
