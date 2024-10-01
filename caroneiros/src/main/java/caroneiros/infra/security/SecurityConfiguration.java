@@ -33,14 +33,12 @@ public class SecurityConfiguration {
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/users").permitAll()
                             .requestMatchers(HttpMethod.PUT, "/users/{id}").authenticated()
-                            .requestMatchers("/users/userId/vehicles").authenticated() // Para alterar dados dos
-                            // proprios veiculos cadastrados
+                            .requestMatchers("/users/{userId}/vehicles").authenticated()
                             .requestMatchers("/carpools").authenticated()
                             .requestMatchers("/reservations").authenticated()
                             .requestMatchers("/reviwes").authenticated()
                             .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
-
                             .anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
