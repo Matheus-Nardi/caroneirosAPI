@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import caroneiros.domain.models.AppUser;
 import caroneiros.dtos.appuser.AppUserDTO;
+import caroneiros.dtos.appuser.AppUserResetPasswordDTO;
 import caroneiros.dtos.appuser.AppUserResponseDTO;
 import caroneiros.dtos.appuser.AppUserToUpdateRequestDTO;
 import caroneiros.dtos.mapper.AppUserMapper;
+import caroneiros.infra.exceptions.InvalidOperationException;
 import caroneiros.infra.exceptions.NotFoundException;
 import caroneiros.repositories.AppUserRepository;
 import lombok.extern.log4j.Log4j2;
@@ -90,6 +92,22 @@ public class AppUserServiceImpl implements AppUserService {
     public void updateUser(Long id, AppUser user) {
         AppUser userFromDB = getUserByIdOrThrow(id);
         userFromDB.setScore(user.getScore());
+        userRepository.save(userFromDB);
+    }
+
+    @Transactional
+    @Override
+    public void resetPassword(Long id, AppUserResetPasswordDTO dto) {
+        log.info("Resetando senha do usuario [{}]", id);
+        AppUser userFromDB = getUserByIdOrThrow(id);
+
+        if (!dto.newPassword().equals(dto.confirmedNewPassword()))
+            throw new InvalidOperationException("As senhas precisam ser iguais");
+
+        if (passwordEncoder.matches(dto.newPassword(), userFromDB.getPassword()))
+            throw new InvalidOperationException("A nova senha não pode ser igual a antiga senha");
+
+        userFromDB.setPassword(passwordEncoder.encode(dto.newPassword()));
         userRepository.save(userFromDB);
     }
 

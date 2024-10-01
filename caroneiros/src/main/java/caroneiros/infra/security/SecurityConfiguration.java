@@ -32,13 +32,14 @@ public class SecurityConfiguration {
                     auth
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "/users/{id}").authenticated()
-                            .requestMatchers("/users/{userId}/vehicles").authenticated()
+                            .requestMatchers(HttpMethod.PUT, "/users/*/recover").permitAll()
+                            .requestMatchers(HttpMethod.PATCH, "/users/*").authenticated()
+                            .requestMatchers("/users/*/vehicles").authenticated()
                             .requestMatchers("/carpools").authenticated()
                             .requestMatchers("/reservations").authenticated()
                             .requestMatchers("/reviwes").authenticated()
-                            .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/users/*").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, "/users/*").hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
