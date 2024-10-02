@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record ReviewRequestDTO(
-                @NotNull(message = "The filed score is mandatory") @Min(1) @Max(5) Integer score,
-                String description) {
-
+        @NotNull(message = "{field.score.mandatory}") @Min(value = 1, message = "{field.score.min}") @Max(value = 5, message = "{field.score.max}") Integer score,
+        String description) {
 }

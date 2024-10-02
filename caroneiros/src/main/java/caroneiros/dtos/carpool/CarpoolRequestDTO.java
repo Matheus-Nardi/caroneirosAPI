@@ -10,10 +10,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public record CarpoolRequestDTO(
-                @NotEmpty(message = "The field departure city is mandatory") String departureCity,
-                @JsonFormat(pattern = "dd/MM/yyyy HH:mm") @NotNull(message = "Set a estimated departure") LocalDateTime estimatedDeparture,
-                @NotNull(message = "The field estimated price is mandatory") 
-                Double estimadedPrice,
-                @NotNull(message = "The filed seats is mandatory") @Min(0) @Max(4) Integer seatsAvailable) {
-
+        @NotEmpty(message = "{field.departureCity.mandatory}") String departureCity,
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm") @NotNull(message = "{field.estimatedDeparture.mandatory}") LocalDateTime estimatedDeparture,
+        @NotNull(message = "{field.estimatedPrice.mandatory}") Double estimadedPrice,
+        @NotNull(message = "{field.seatsAvailable.mandatory}") @Min(value = 0, message = "{field.seatsAvailable.min}") @Max(value = 4, message = "{field.seatsAvailable.max}") Integer seatsAvailable
+) {
 }

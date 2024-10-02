@@ -1,4 +1,5 @@
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\App.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\configuration\InternationalizationConfiguration.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\controllers\AppUserController.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\controllers\CarpoolController.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\controllers\CarpoolReservationController.java
@@ -12,6 +13,7 @@ C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\City.
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\Review.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\domain\models\Vehicle.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\appuser\AppUserDTO.java
+C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\appuser\AppUserResetPasswordDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\appuser\AppUserResponseDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\appuser\AppUserToUpdateRequestDTO.java
 C:\dev\spring\caroneiros\caroneiros\src\main\java\caroneiros\dtos\carpool\CarpoolRequestDTO.java

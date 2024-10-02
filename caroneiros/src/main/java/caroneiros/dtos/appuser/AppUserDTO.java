@@ -8,16 +8,15 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record AppUserDTO(
-        @NotEmpty(message = "The field name is mandatory") String name,
-        @NotEmpty(message = "The field email is mandatory") @Email(message = "Invalid email") String email,
-        @NotEmpty(message = "The field password is mandatory")
-        @Size(min = 8, message = "The password must be at least 8 characters long")
+        @NotEmpty(message = "{field.name.mandatory}") String name,
+        @NotEmpty(message = "{field.email.mandatory}") @Email(message = "{field.email.invalid}") String email,
+        @NotEmpty(message = "{field.password.mandatory}")
+        @Size(min = 8, message = "{field.password.size}")
         @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$",
-        message = "The password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.")
+        message = "{field.password.invalid}")
         String password,
-        @CPF @NotEmpty(message = "The filed CPF is mandatory") String cpf,
-        @NotEmpty(message = "The field phone is mandatory") @Size(min = 11, max = 11) String phone,
+        @CPF @NotEmpty(message = "{field.cpf.mandatory}") String cpf,
+        @NotEmpty(message = "{field.phone.mandatory}") @Size(min = 11, max = 11, message = "{field.phone.size}") String phone,
         String bio,
         Boolean driver) {
-
 }
