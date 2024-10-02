@@ -1,8 +1,5 @@
 package caroneiros.services.appuser;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -78,14 +75,6 @@ public class AppUserServiceImpl implements AppUserService {
     private AppUser getUserByIdOrThrow(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Não foi possível encontrar um usuário de id " + id));
-    }
-
-    @Override
-    public List<AppUserResponseDTO> saveAll(List<AppUserDTO> users) {
-        List<AppUser> usersSaved = users.stream().map(user -> new AppUser(user)).toList();
-
-        userRepository.saveAll(usersSaved);
-        return usersSaved.stream().map(user -> AppUserMapper.toAppUserResponseDTO(user)).collect(Collectors.toList());
     }
 
     @Override
